@@ -638,7 +638,7 @@ function addBlock(act, start, useDefaultSpot){
   const b = {id: S.uid++, act, start, dur: d};
   S.blocks.push(b); delete S.none[act]; $('qErr').classList.remove('show');
   save(); selId = b.id; renderTL();
-  if (act === 'pa') openSheet(b.id, true);
+  openSheet(b.id, true);   // open the time panel right away after tapping the timeline
 }
 
 /* ===================== SHEET ===================== */
@@ -673,8 +673,12 @@ $('paWhere').addEventListener('click', e => { const p = e.target.closest('button
 $('paOther').addEventListener('input', e => sh.paOther = e.target.value);
 $('sStart').onchange = paintSheet; $('sEnd').onchange = paintSheet;
 function closeSheet(){ $('sheet').classList.remove('open'); $('scrim').classList.remove('open'); sh = null; renderTL(); }
-$('sCancel').onclick = closeSheet;
-$('scrim').onclick = () => { if (Date.now() - sheetAt > 450) closeSheet(); };  // ignore the click that follows the tap which opened it
+function cancelSheet(){
+  if (sh && sh.isNew) { const i = S.blocks.findIndex(b => b.id === sh.id); if (i >= 0) S.blocks.splice(i, 1); selId = null; save(); }
+  closeSheet();
+}
+$('sCancel').onclick = cancelSheet;
+$('scrim').onclick = () => { if (Date.now() - sheetAt > 450) cancelSheet(); };  // ignore the click that follows the tap which opened it
 $('sDel').onclick = () => { const id = sh.id; closeSheet(); del(id); };
 $('sSave').onclick = () => {
   const b = byId(sh.id), s = +$('sStart').value, e = +$('sEnd').value;
