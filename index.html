@@ -53,7 +53,7 @@ button{font:inherit;color:inherit}
   .scroller{top:0}
   .topbar{padding-top:var(--safe-t)!important;height:calc(56px + var(--safe-t))!important}
   .footer{padding-bottom:calc(10px + var(--safe-b))!important}
-  .sheet .inner{padding-bottom:calc(18px + var(--safe-b))!important}
+  .sheet .acts{padding-bottom:calc(12px + var(--safe-b))!important}
 }
 
 /* ---------- top bar ---------- */
@@ -188,9 +188,9 @@ select:disabled{opacity:.45}
 /* ---------- sheet ---------- */
 .scrim{position:absolute;inset:0;background:rgba(20,22,30,.4);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
 .scrim.open{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:61;transform:translateY(105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
+.sheet{position:absolute;left:0;right:0;bottom:0;top:56px;display:flex;flex-direction:column;justify-content:flex-end;pointer-events:none;z-index:61;transform:translateY(105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
 .sheet.open{transform:none;visibility:visible;transition:transform .25s ease}
-.sheet .inner{background:#fff;border-radius:22px 22px 0 0;padding:18px 18px 36px;max-height:90vh;overflow-y:auto}
+.sheet .inner{pointer-events:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 18px 0;max-height:100%;overflow-y:auto;overscroll-behavior:contain}
 .sheet h3{margin:0 0 2px;font-size:18px}
 .flabel{font-size:12.5px;font-weight:800;color:var(--muted);margin:14px 0 7px;text-transform:uppercase;letter-spacing:.05em}
 .pills{display:flex;flex-wrap:wrap;gap:7px}
@@ -206,7 +206,26 @@ input[type=text]{width:100%;font:inherit;font-size:16px;padding:11px 13px;border
 .tgrid select{margin-top:5px;font-size:15px;padding:11px 8px}
 .einfo{margin-top:12px;font-size:14px;font-weight:600}
 .einfo.bad{color:var(--err)}
-.sheet .acts{display:flex;gap:10px;margin-top:16px}
+.sheet .acts{display:flex;gap:10px;position:sticky;bottom:0;background:#fff;margin:14px -18px 0;padding:12px 18px 34px;border-top:1px solid var(--line2)}
+.seg3{grid-template-columns:repeat(3,1fr)}
+.flabel.miss{color:var(--err)}
+.flabel.miss::after{content:" — required";font-weight:700;text-transform:none;letter-spacing:0}
+.optlist{display:grid;gap:7px}
+.optlist button{display:flex;gap:10px;align-items:center;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer}
+.optlist button::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid #b9b4a8;flex:0 0 16px}
+.optlist button b{display:block;font-size:14px}
+.optlist button span{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.optlist button.on{border-color:var(--pa);background:var(--pa-bg)}
+.optlist button.on::before{border-color:var(--pa);background:radial-gradient(circle,var(--pa) 0 4px,#fff 4.5px)}
+.mixrow{margin-bottom:10px}
+.mixrow .ml{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.mixrow .ml span{font-weight:500;color:var(--muted);font-size:12px}
+.mixrow .chips5{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.chips5 button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 0;font-weight:800;font-size:13.5px;cursor:pointer}
+.chips5 button.on{border-color:var(--pa);background:var(--pa);color:#fff}
+.chips5 button.zero.on{background:#eceae4;border-color:#cfcabd;color:var(--muted)}
+.mixtotal{font-size:13px;font-weight:700;padding:8px 10px;border-radius:10px;background:var(--err-bg);color:var(--err)}
+.mixtotal.ok{background:#e6f4ec;color:#14643d}
 
 /* ---------- toast ---------- */
 .toast{position:absolute;left:50%;bottom:112px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:11px 14px;border-radius:12px;font-size:14px;z-index:70;opacity:0;pointer-events:none;transition:all .2s;display:flex;gap:14px;align-items:center;white-space:nowrap}
@@ -249,7 +268,7 @@ input[type=text]{width:100%;font:inherit;font-size:16px;padding:11px 13px;border
           <div class="labels" id="labels"><div class="axsp"></div></div>
           <div class="hs" id="hs"><div class="canvas" id="canvas"></div></div>
         </div>
-        <div class="legend" id="legend" hidden><span><i style="background:var(--pa-bg)"></i>Outdoor</span><span><i style="background:repeating-linear-gradient(135deg,var(--pa-bg) 0 3px,#fff 3px 5px)"></i>Indoor</span></div>
+        <div class="legend" id="legend" hidden><span><i style="background:var(--pa-bg)"></i>Outdoors</span><span><i style="background:repeating-linear-gradient(135deg,var(--pa-bg) 0 3px,#fff 3px 5px)"></i>Indoors</span><span><i style="background:linear-gradient(90deg,var(--pa-bg) 0 50%,transparent 50%),repeating-linear-gradient(135deg,var(--pa-bg) 0 3px,#fff 3px 5px)"></i>Mixed</span></div>
       </div>
 
       <div class="card">
@@ -319,19 +338,27 @@ input[type=text]{width:100%;font:inherit;font-size:16px;padding:11px 13px;border
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
     <div class="inner">
       <h3 id="shTitle"></h3>
-      <div id="paFields">
-        <div class="flabel">What kind of activity?</div>
-        <div class="pills" id="paType"></div>
-        <input type="text" id="paOther" placeholder="Please describe the activity" hidden>
-        <div class="flabel">Indoors or outdoors?</div>
-        <div class="seg" id="paWhere"></div>
-      </div>
       <div class="flabel">Time</div>
       <div class="tgrid">
         <div><label for="sStart">Starts</label><select id="sStart"></select></div>
         <div><label for="sEnd">Ends</label><select id="sEnd"></select></div>
       </div>
       <div class="einfo" id="einfo"></div>
+      <div id="paFields">
+        <div class="flabel" data-f="type">What kind of activity?</div>
+        <div class="pills" id="paType"></div>
+        <input type="text" id="paOther" placeholder="Please describe the activity" hidden>
+        <div class="flabel" data-f="loc">Where was it?</div>
+        <div class="pills" id="paLoc"></div>
+        <input type="text" id="paLocOther" placeholder="Please describe the place" hidden>
+        <div class="flabel" data-f="org">Was this an organized class or lesson?</div>
+        <div class="seg seg3" id="paOrg"></div>
+        <div class="flabel" data-f="int">How hard was your child breathing during this activity?</div>
+        <div class="optlist" id="paInt"></div>
+        <div class="flabel" data-f="mix">About how much of this activity was in each of these?</div>
+        <div id="paMix"></div>
+        <div class="mixtotal" id="mixTotal"></div>
+      </div>
       <div class="acts">
         <button class="btn danger" id="sDel">Delete</button>
         <button class="btn ghostbtn" id="sCancel">Cancel</button>
@@ -389,7 +416,24 @@ const PA_TYPES = [
   ['swimming','Swimming','Swim'], ['class','Dance, gym, or movement class','Class'], ['sports','Sports or ball games','Sports'],
   ['other','Other','Other']
 ];
-const STORE_KEY = 'child_daily_schedule_v2';
+// Location options — PLACEHOLDERS: replace with the exact options used in the CUBS pre-survey.
+// They can also be passed in the page URL, e.g. ?locs=Home|School|Block%20playground (one family's own list).
+let LOCATIONS = [
+  ['home','At home (indoors or own garden/corridor)'],
+  ['school','School / childcare'],
+  ['playground','Playground near home'],
+  ['park','Park or park connector'],
+  ['void_deck','Void deck / HDB common area'],
+  ['sports','Sports facility or swimming pool'],
+  ['mall','Shopping mall / indoor play centre'],
+  ['other','Other']
+];
+try { const q = new URLSearchParams(location.search).get('locs'); if (q) LOCATIONS = q.split('|').map(x => x.trim()).filter(Boolean).map(x => [x.toLowerCase().replace(/[^a-z0-9]+/g,'_'), x]).concat([['other','Other']]); } catch(_) {}
+const ORG = [['yes','Yes'],['no','No'],['both','Both']];
+const INTENSITY = [['normal','Normal','Breathing as usual'],['higher','Higher','Breathing faster but can still talk'],['very_high','Very high','Breathing hard']];
+const SETTINGS = [['sun','Direct sunlight','outdoors, no shade'],['tree','Tree shade','outdoors, under trees'],['covered','Covered or sheltered','outdoors under a roof'],['indoor','Indoors','under artificial light']];
+const STEPS5 = [[0,'None'],[25,'¼'],[50,'½'],[75,'¾'],[100,'All']];
+const STORE_KEY = 'child_daily_schedule_v3';
 const NSTEPS = ACTS.length + 1;
 
 /* ===================== STATE ===================== */
@@ -416,7 +460,19 @@ const cur = () => ACTS[S.step];
 const actOf = k => ACTS.find(a => a.key === k);
 const byId = id => S.blocks.find(b => b.id === id);
 const of = k => S.blocks.filter(b => b.act === k).sort((a, b) => a.start - b.start);
-const paDone = b => b.act !== 'pa' || (b.paType && b.where && (b.paType !== 'other' || (b.paOther || '').trim()));
+const mixSum = m => m ? SETTINGS.reduce((t, x) => t + (+m[x[0]] || 0), 0) : 0;
+const outShare = b => b.mix ? ((+b.mix.sun || 0) + (+b.mix.tree || 0) + (+b.mix.covered || 0)) / 100 : 0;
+const paMissing = x => {   // x: a block or the sheet state
+  const m = [];
+  if (!x.paType || (x.paType === 'other' && !(x.paOther || '').trim())) m.push('type');
+  if (!x.loc || (x.loc === 'other' && !(x.locOther || '').trim())) m.push('loc');
+  if (!x.org) m.push('org');
+  if (!x.int) m.push('int');
+  if (mixSum(x.mix) !== 100) m.push('mix');
+  return m;
+};
+const paDone = b => b.act !== 'pa' || paMissing(b).length === 0;
+const locLabel = b => b.loc === 'other' ? `Other: ${b.locOther || ''}` : (LOCATIONS.find(l => l[0] === b.loc) || [,b.loc || ''])[1];
 const paShort = b => b.paType === 'other' ? ((b.paOther || '').trim() || 'Other') : (PA_TYPES.find(t => t[0] === b.paType) || [,,'Details?'])[2];
 const paLong = b => b.paType === 'other' ? `Other: ${(b.paOther || '').trim()}` : (PA_TYPES.find(t => t[0] === b.paType) || [,''])[1];
 const N = DAY;
@@ -472,12 +528,17 @@ function renderBlocks(){
       el.style.left = sg[0] * PXM + 'px'; el.style.width = Math.max(w, 3) + 'px';
       el.classList.toggle('sel', b.id === selId);
       el.classList.toggle('need', !paDone(b));
-      el.classList.toggle('indoor', b.act === 'pa' && b.where === 'indoor');
+      el.classList.remove('indoor'); el.style.background = '';
+      if (b.act === 'pa' && paDone(b)) {
+        const o = Math.round(outShare(b) * 100);
+        if (o === 0) el.classList.add('indoor');
+        else if (o < 100 && b.id !== selId) el.style.background = `linear-gradient(90deg,var(--bgc) 0 ${o}%,transparent ${o}%),repeating-linear-gradient(135deg,var(--bgc) 0 6px,#fff 6px 10px)`;
+      }
       el.classList.toggle('cutR', n === 2 && i === 0); el.classList.toggle('cutL', n === 2 && i === 1);
       el.classList.toggle('showL', i === 0); el.classList.toggle('showR', i === n - 1);
       const main = n === 1 || (sg[1] - sg[0]) >= b.dur / 2;   // show duration on the larger piece
       let html = '';
-      if (b.act === 'pa' && b.where && w >= 14) html += IC[b.where === 'outdoor' ? 'sun' : 'house'];
+      if (b.act === 'pa' && paDone(b) && w >= 14) html += IC[outShare(b) >= 0.5 ? 'sun' : 'house'];
       if (b.act === 'pa' && !paDone(b) && w >= 14) html += '<span>?</span>';
       if (main && w >= (b.act === 'pa' ? 44 : 26)) html += `<span>${dur(b.dur)}</span>`;
       el.firstChild.innerHTML = html;
@@ -535,7 +596,7 @@ function renderList(){
   $('entries').style.setProperty('--c', `var(--${a.key})`);
   $('entries').innerHTML = list.length ? list.map(b => {
     const sub = b.act === 'pa'
-      ? (paDone(b) ? `${dur(b.dur)} · ${paLong(b)} · ${b.where === 'outdoor' ? 'Outdoors' : 'Indoors'}` : `<span class="need">Choose activity type and indoors/outdoors</span>`)
+      ? (paDone(b) ? `${dur(b.dur)} · ${paLong(b)} · ${locLabel(b)} · ${(INTENSITY.find(x => x[0] === b.int) || [,''])[1]} breathing · ${Math.round(outShare(b) * 100)}% outdoors${b.org !== 'no' ? ' · class/lesson' + (b.org === 'both' ? ' (partly)' : '') : ''}` : `<span class="need">Tap Edit to finish the activity details</span>`)
       : dur(b.dur);
     return `<div class="entry ${paDone(b) ? '' : 'need'}" style="--c:var(--${a.key})"><div class="sw"></div><div class="tx"><b>${range(b)}</b><span>${sub}</span></div><button class="ebtn" data-edit="${b.id}">Edit</button></div>`;
   }).join('') : `<div class="empty">${S.none[a.key] ? a.none + '.' : 'Nothing added yet.'}</div>`;
@@ -646,20 +707,32 @@ function addBlock(act, start, useDefaultSpot){
 const timeOpts = (from, to, incl) => { let s = ''; for (let m = from; incl ? m <= to : m < to; m += SNAP) s += `<option value="${m}">${fmtD(m)}</option>`; return s; };
 $('sStart').innerHTML = timeOpts(0, DAY, false);
 $('paType').innerHTML = PA_TYPES.map(t => `<button class="pill" data-v="${t[0]}">${t[1]}</button>`).join('');
-$('paWhere').innerHTML = `<button data-v="outdoor">${IC.sun}Outdoors</button><button data-v="indoor">${IC.house}Indoors</button>`;
+$('paLoc').innerHTML = LOCATIONS.map(l => `<button class="pill" data-v="${l[0]}">${l[1]}</button>`).join('');
+$('paOrg').innerHTML = ORG.map(o => `<button data-v="${o[0]}">${o[1]}</button>`).join('');
+$('paInt').innerHTML = INTENSITY.map(o => `<button data-v="${o[0]}"><div><b>${o[1]}</b><span>${o[2]}</span></div></button>`).join('');
+$('paMix').innerHTML = SETTINGS.map(x => `<div class="mixrow"><div class="ml">${x[1]} <span>(${x[2]})</span></div><div class="chips5" data-k="${x[0]}">${STEPS5.map(v => `<button data-v="${v[0]}" class="${v[0] ? '' : 'zero'}">${v[1]}</button>`).join('')}</div></div>`).join('');
 function openSheet(id, isNew){
   const b = byId(id); if (!b) return;
-  sh = {id, isNew: !!isNew, paType: b.paType || '', paOther: b.paOther || '', where: b.where || ''};
+  sh = {id, isNew: !!isNew, paType: b.paType || '', paOther: b.paOther || '', loc: b.loc || '', locOther: b.locOther || '', org: b.org || '', int: b.int || '', mix: Object.assign({sun: 0, tree: 0, covered: 0, indoor: 0}, b.mix || {}), tried: false};
   $('shTitle').textContent = b.act === 'pa' ? 'Physical activity' : actOf(b.act).label;
   $('paFields').hidden = b.act !== 'pa';
   const wrap = !!actOf(b.act).wrap; sh.wrap = wrap;
   $('sEnd').innerHTML = wrap ? timeOpts(0, DAY, false) : timeOpts(SNAP, DAY, true);
   $('sStart').value = b.start; $('sEnd').value = wrap ? mod(b.start + b.dur, DAY) : b.start + b.dur;
-  paintSheet(); sheetAt = Date.now(); $('sheet').classList.add('open'); $('scrim').classList.add('open');
+  paintSheet(); sheetAt = Date.now(); $('sheet').classList.add('open'); $('scrim').classList.add('open'); $('sheet').querySelector('.inner').scrollTop = 0;
 }
 function paintSheet(){
   $('paType').querySelectorAll('.pill').forEach(p => p.classList.toggle('on', p.dataset.v === sh.paType));
-  $('paWhere').querySelectorAll('button').forEach(p => p.classList.toggle('on', p.dataset.v === sh.where));
+  $('paLoc').querySelectorAll('.pill').forEach(p => p.classList.toggle('on', p.dataset.v === sh.loc));
+  $('paLocOther').hidden = sh.loc !== 'other'; $('paLocOther').value = sh.locOther;
+  $('paOrg').querySelectorAll('button').forEach(p => p.classList.toggle('on', p.dataset.v === sh.org));
+  $('paInt').querySelectorAll('button').forEach(p => p.classList.toggle('on', p.dataset.v === sh.int));
+  $('paMix').querySelectorAll('.chips5').forEach(row => row.querySelectorAll('button').forEach(bt => bt.classList.toggle('on', +bt.dataset.v === +sh.mix[row.dataset.k])));
+  const tot = mixSum(sh.mix), mt = $('mixTotal');
+  mt.textContent = tot === 100 ? '✓ Adds up to 100%' : `Total so far: ${tot}% — please make these add up to 100%`;
+  mt.classList.toggle('ok', tot === 100);
+  const miss = sh.tried ? paMissing(sh) : [];
+  $('paFields').querySelectorAll('.flabel[data-f]').forEach(f => f.classList.toggle('miss', miss.includes(f.dataset.f)));
   $('paOther').hidden = sh.paType !== 'other'; $('paOther').value = sh.paOther;
   const s = +$('sStart').value, e = +$('sEnd').value, el = $('einfo');
   if (sh.wrap) {
@@ -670,7 +743,17 @@ function paintSheet(){
   else { el.textContent = `Duration: ${dur(e - s)}`; el.className = 'einfo'; }
 }
 $('paType').addEventListener('click', e => { const p = e.target.closest('.pill'); if (p) { sh.paType = p.dataset.v; paintSheet(); if (sh.paType === 'other') $('paOther').focus(); } });
-$('paWhere').addEventListener('click', e => { const p = e.target.closest('button'); if (p) { sh.where = p.dataset.v; paintSheet(); } });
+$('paLoc').addEventListener('click', e => { const p = e.target.closest('.pill'); if (p) { sh.loc = p.dataset.v; paintSheet(); if (sh.loc === 'other') $('paLocOther').focus(); } });
+$('paLocOther').addEventListener('input', e => sh.locOther = e.target.value);
+$('paOrg').addEventListener('click', e => { const p = e.target.closest('button'); if (p) { sh.org = p.dataset.v; paintSheet(); } });
+$('paInt').addEventListener('click', e => { const p = e.target.closest('button'); if (p) { sh.int = p.dataset.v; paintSheet(); } });
+$('paMix').addEventListener('click', e => {
+  const bt = e.target.closest('.chips5 button'); if (!bt) return;
+  const k = bt.closest('.chips5').dataset.k, v = +bt.dataset.v;
+  sh.mix[k] = v;
+  if (v === 100) SETTINGS.forEach(x => { if (x[0] !== k) sh.mix[x[0]] = 0; });   // "All" clears the others
+  paintSheet();
+});
 $('paOther').addEventListener('input', e => sh.paOther = e.target.value);
 $('sStart').onchange = paintSheet; $('sEnd').onchange = paintSheet;
 function closeSheet(){ $('sheet').classList.remove('open'); $('scrim').classList.remove('open'); sh = null; renderTL(); }
@@ -686,10 +769,16 @@ $('sSave').onclick = () => {
   const d = sh.wrap ? mod(e - s, DAY) : e - s;
   if (d <= 0) return;
   if (b.act === 'pa') {
-    if (!sh.paType || !sh.where || (sh.paType === 'other' && !sh.paOther.trim())) {
-      const el = $('einfo'); el.textContent = !sh.paType ? 'Please choose the type of activity.' : sh.paType === 'other' && !sh.paOther.trim() ? 'Please describe the activity.' : 'Please choose indoors or outdoors.'; el.className = 'einfo bad'; return;
+    const miss = paMissing(sh);
+    if (miss.length) {
+      sh.tried = true; paintSheet();
+      const f = $('paFields').querySelector(`.flabel[data-f="${miss[0]}"]`), inner = $('sheet').querySelector('.inner');
+      inner.scrollTo({top: Math.max(0, inner.scrollTop + toLocal(f.getBoundingClientRect().top - inner.getBoundingClientRect().top) - 10), behavior: 'smooth'});
+      return;
     }
-    b.paType = sh.paType; b.paOther = sh.paType === 'other' ? sh.paOther.trim() : ''; b.where = sh.where;
+    Object.assign(b, {paType: sh.paType, paOther: sh.paType === 'other' ? sh.paOther.trim() : '', loc: sh.loc, locOther: sh.loc === 'other' ? sh.locOther.trim() : '',
+      org: sh.org, int: sh.int, mix: Object.assign({}, sh.mix)});
+    delete b.where;
   }
   b.start = s; b.dur = d; selId = null; save(); closeSheet();
 };
@@ -713,7 +802,7 @@ $('qNoneBox').addEventListener('change', e => { S.none[cur().key] = e.target.che
   $('q3h').innerHTML = '<option value="">Hours…</option>' + Array.from({length: 25}, (_, h) => `<option value="${h}">${h} ${h === 1 ? 'hour' : 'hours'}</option>`).join('');
   $('q3m').innerHTML = '<option value="">Minutes…</option>' + [0, 15, 30, 45].map(m => `<option value="${m}">${m} min</option>`).join('');
 })();
-const outdoorPA = () => of('pa').filter(b => paDone(b) && b.where === 'outdoor');
+const outdoorPA = () => of('pa').filter(b => paDone(b) && outShare(b) > 0);
 const wakeUp = () => { const s = of('sleep').sort((a, b) => b.dur - a.dur)[0]; return s ? mod(s.start + s.dur, DAY) : null; };
 function renderOut(){
   const o = S.out, showMore = o.q1 === 'yes' || o.q1 === 'not_sure';
@@ -734,7 +823,7 @@ function renderOut(){
   }
   $('w2').innerHTML = w2.map(t => `<div class="note">⚠︎ ${t}</div>`).join('');
   // Q3
-  const paMin = total(opa.map(b => ({start: Math.max(0, b.start), dur: b.start + b.dur - Math.max(0, b.start)})));
+  const paMin = Math.round(opa.reduce((t, b) => t + b.dur * outShare(b), 0) / 5) * 5;
   $('ref3').innerHTML = (paMin ? `From the timeline: <b>${dur(paMin)}</b> of outdoor physical activity. ` : '') +
     'Please also include other time outdoors, for example <b>walking to and from school</b>, waiting for the bus, outdoor recess, running errands on foot, or sitting or playing outside.';
   $('q3h').value = o.h; $('q3m').value = o.m;
@@ -772,22 +861,31 @@ function buildResponse(){
   const o = S.out, more = o.q1 === 'yes' || o.q1 === 'not_sure';
   const episodes = S.blocks.slice().sort((a, b) => ACTS.findIndex(x => x.key === a.act) - ACTS.findIndex(x => x.key === b.act) || a.start - b.start).map(b => {
     const e = {activity: b.act, start: hhmm(b.start), end: b.start + b.dur === DAY ? '24:00' : hhmm(b.start + b.dur), duration_min: b.dur, crosses_midnight: b.start + b.dur > DAY};
-    if (b.act === 'pa') Object.assign(e, {pa_type: b.paType, pa_type_other: b.paOther || null, setting: b.where});
+    if (b.act === 'pa') Object.assign(e, {pa_type: b.paType, pa_type_other: b.paOther || null, location: b.loc, location_other: b.locOther || null,
+      organized: b.org, breathing: b.int, setting_pct: {direct_sun: +b.mix.sun, tree_shade: +b.mix.tree, covered: +b.mix.covered, indoors: +b.mix.indoor},
+      setting_min: {direct_sun: Math.round(b.dur * b.mix.sun / 100), tree_shade: Math.round(b.dur * b.mix.tree / 100), covered: Math.round(b.dur * b.mix.covered / 100), indoors: Math.round(b.dur * b.mix.indoor / 100)}});
     return e;
   });
   const pa = of('pa');
   const byType = Object.fromEntries(PA_TYPES.map(t => [t[0], total(pa.filter(b => b.paType === t[0]))]));
   const flat = {};
   ACTS.forEach(a => { flat[`${a.key}_total_min`] = total(of(a.key)); flat[`${a.key}_episodes`] = of(a.key).length; if (a.none) flat[`${a.key}_none`] = !of(a.key).length && !!S.none[a.key]; });
-  flat.pa_outdoor_min = total(pa.filter(b => b.where === 'outdoor'));
-  flat.pa_indoor_min = total(pa.filter(b => b.where === 'indoor'));
+  const sumMin = f => Math.round(pa.reduce((t, b) => t + f(b), 0));
+  flat.pa_direct_sun_min = sumMin(b => b.dur * b.mix.sun / 100);
+  flat.pa_tree_shade_min = sumMin(b => b.dur * b.mix.tree / 100);
+  flat.pa_covered_min = sumMin(b => b.dur * b.mix.covered / 100);
+  flat.pa_indoor_min = sumMin(b => b.dur * b.mix.indoor / 100);
+  flat.pa_outdoor_min = flat.pa_direct_sun_min + flat.pa_tree_shade_min + flat.pa_covered_min;
+  INTENSITY.forEach(x => flat[`pa_breathing_${x[0]}_min`] = sumMin(b => b.int === x[0] ? b.dur : 0));
+  flat.pa_organized_min = sumMin(b => b.org === 'yes' ? b.dur : 0);
+  flat.pa_partly_organized_min = sumMin(b => b.org === 'both' ? b.dur : 0);
   PA_TYPES.forEach(t => flat[`pa_${t[0]}_min`] = byType[t[0]]);
   const sl = of('sleep').sort((a, b) => b.dur - a.dur)[0];
   flat.sleep_onset = sl ? hhmm(sl.start) : ''; flat.wake_time = sl ? hhmm(sl.start + sl.dur) : '';
   flat.outdoor_daylight = o.q1;
   flat.outdoor_first_time = !more ? '' : o.firstNS ? 'not_sure' : hhmm(+o.first);
   flat.outdoor_total_min = !more ? '' : o.totalNS ? 'not_sure' : +o.h * 60 + +o.m;
-  return {survey: 'child_daily_schedule_v2', reference_day: 'today', timeline_window: '00:00–24:00 (night sleep may cross midnight)',
+  return {survey: 'cubs_daily_record_v3', reference_day: 'today', timeline_window: '00:00–24:00 (night sleep may cross midnight)',
     submitted_at: new Date().toISOString(), timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     episodes, none: Object.fromEntries(ACTS.filter(a => a.none).map(a => [a.key, !of(a.key).length && !!S.none[a.key]])),
     warnings: warnings(), outdoor: {daylight_outdoors: o.q1, first_outdoor_time: flat.outdoor_first_time || null, total_outdoor_min: flat.outdoor_total_min === '' ? null : flat.outdoor_total_min},
