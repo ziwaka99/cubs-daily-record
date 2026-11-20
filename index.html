@@ -73,6 +73,7 @@ p{line-height:1.5;margin:0 0 8px;font-size:15px}
 .muted{color:var(--muted)} .small{font-size:13px}
 
 /* ---------- question card ---------- */
+.qcard{background:none;border-radius:0;padding:12px 18px 6px;margin:0 0 4px}
 .qcard .row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
 .qchip{display:flex;align-items:center;gap:7px;border-radius:13px;background:var(--bgc);border:1.5px solid var(--c);padding:9px 12px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;font-weight:800;font-size:13.5px}
 .qchip svg{width:18px;height:18px;color:var(--c)}
@@ -87,12 +88,12 @@ p{line-height:1.5;margin:0 0 8px;font-size:15px}
 /* ---------- horizontal timeline ---------- */
 .tlcard{padding:10px 10px 6px 0;margin:8px 6px 10px;overflow:visible}
 .tlbody{display:flex}
-.labels{flex:0 0 50px;border-right:1px solid var(--line);position:relative;z-index:2;background:#fff}
+.labels{flex:0 0 66px;border-right:1px solid var(--line);position:relative;z-index:2;background:#fff}
 .labels .axsp{height:26px}
-.lrow{height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0 2px;font-size:8.5px;font-weight:700;color:var(--muted);border-top:1px solid var(--line2);cursor:pointer;line-height:1.1;text-align:center;position:relative}
-.lrow .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;flex:0 0 24px;background:var(--bgc);color:var(--c)}
-.lrow .ic svg{width:14px;height:14px}
-.lrow .ok{position:absolute;top:2px;right:3px;color:var(--accent);font-size:10px}
+.lrow{height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 2px;font-size:12.5px;font-weight:700;color:var(--muted);border-top:1px solid var(--line2);cursor:pointer;line-height:1.05;text-align:center;position:relative;letter-spacing:-.01em}
+.lrow .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:0 0 36px;background:var(--bgc);color:var(--c)}
+.lrow .ic svg{width:21px;height:21px}
+.lrow .ok{position:absolute;top:3px;right:4px;color:var(--accent);font-size:13px;font-weight:800}
 .lrow.cur{color:var(--ink);background:var(--bgc);box-shadow:inset 3px 0 0 var(--c)}
 .hs{flex:1;min-width:0;position:relative}
 .canvas{position:relative}
@@ -106,10 +107,10 @@ p{line-height:1.5;margin:0 0 8px;font-size:15px}
 .vl.v3{border-left-color:var(--line)}
 .vl.half{border-left:1px dashed #f0ede6}
 .vl.mid{border-left:2px solid #9aa0ad;top:0}
-.lane{position:absolute;left:0;right:0;height:50px;border-top:1px solid var(--line2)}
+.lane{position:absolute;left:0;right:0;height:66px;border-top:1px solid var(--line2)}
 .lane.cur{background:color-mix(in srgb,var(--bgc) 55%,transparent);cursor:copy}
 .lane:not(.cur) .blk{opacity:.55}
-.blk{position:absolute;top:6px;height:38px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--bgc);border:1.5px solid var(--c);color:var(--ink);touch-action:auto;cursor:grab;padding:0 2px;font-size:10px;line-height:1.25;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;white-space:nowrap;z-index:1}
+.blk{position:absolute;top:9px;height:48px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--bgc);border:1.5px solid var(--c);color:var(--ink);touch-action:auto;cursor:grab;padding:0 2px;font-size:10px;line-height:1.25;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;white-space:nowrap;z-index:1}
 .blk .bx{overflow:hidden;display:flex;align-items:center}
 .blk.cutR{border-right-style:dashed;border-top-right-radius:0;border-bottom-right-radius:0}
 .blk.cutL{border-left-style:dashed;border-top-left-radius:0;border-bottom-left-radius:0}
@@ -129,7 +130,7 @@ p{line-height:1.5;margin:0 0 8px;font-size:15px}
 .blk .tt{position:absolute;top:50%;transform:translateY(-50%);font-size:9px;font-weight:700;letter-spacing:-.01em;color:color-mix(in srgb,var(--c) 78%,#000);white-space:nowrap;pointer-events:none}
 .blk .tt.in{color:color-mix(in srgb,var(--c) 70%,#000)}
 .blk.sel .tt.in{color:#fff}
-.pv{position:absolute;top:6px;height:38px;border:2px dashed var(--c);background:color-mix(in srgb,var(--bgc) 75%,transparent);border-radius:9px;pointer-events:none;z-index:8}
+.pv{position:absolute;top:9px;height:48px;border:2px dashed var(--c);background:color-mix(in srgb,var(--bgc) 75%,transparent);border-radius:9px;pointer-events:none;z-index:8}
 .pv .tag{position:absolute;left:-2px;top:-2px;transform:translateY(-100%);background:var(--c);color:#fff;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:7px;white-space:nowrap}
 .ghost{position:fixed;left:0;top:0;z-index:100;pointer-events:none;transform-origin:0 0;display:flex;align-items:center;gap:6px;border-radius:13px;background:var(--bgc);border:2px solid var(--c);padding:8px 11px;box-shadow:0 12px 26px -8px rgba(0,0,0,.35);font-size:13px;font-weight:800;white-space:nowrap}
 .ghost svg{width:16px;height:16px;color:var(--c)}
@@ -350,7 +351,7 @@ input[type=text]{width:100%;font:inherit;font-size:16px;padding:11px 13px;border
 /* ===================== CONFIG ===================== */
 const DAY = 1440;               // timeline = 12:00 AM to 12:00 AM (24 h)
 let PXM = 0.23;                 // pixels per minute, recomputed so the full day fits the screen width
-const SNAP = 15, AXIS_H = 26, LANE_H = 50;
+const SNAP = 15, AXIS_H = 26, LANE_H = 66;
 
 const IC = {
   school:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11M10 21v-5h4v5"/></svg>',
